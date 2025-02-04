@@ -1,0 +1,90 @@
+{
+  "explorer.confirmDragAndDrop": false,
+  "editor.accessibilitySupport": "off",
+  "editor.minimap.enabled": false,
+  "camelk.integrations.runtimeVersion": "1.6.0",
+  "redhat.telemetry.enabled": false,
+  "git.confirmSync": false,
+  "files.trimTrailingWhitespace": true,
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "hediet.vscode-drawio.theme": "min",
+  "files.insertFinalNewline": true,
+  "explorer.confirmDelete": false,
+  "[yaml]": {
+    "editor.autoIndent": "advanced"
+  },
+  "vs-kubernetes": {
+    "vscode-kubernetes.minikube-path.mac": "/Users/vladimir/.vs-kubernetes/tools/minikube/darwin-amd64/minikube",
+    "vs-kubernetes.crd-code-completion": "disabled",
+    "vs-kubernetes.minikube-show-information-expiration": "2025-01-28T14:16:50.832Z"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "yaml.format.enable": false,
+  "docker.languageserver.formatter.ignoreMultilineInstructions": true,
+  "prettier.documentSelectors": ["*md"],
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "[YAML]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file"
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file"
+  },
+  "[terraform-vars]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file"
+  },
+  "telemetry.telemetryLevel": "off",
+  "yaml.format.bracketSpacing": false,
+  "window.zoomLevel": 2,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.editorAssociations": {
+    "*.svg": "svgPreviewer.customEditor"
+  },
+  "svg.preview.transparencyGrid": true,
+  "svg.preview.boundingBox": false,
+  "markdown.extension.orderedList.marker": "one",
+  "markdown.extension.toc.levels": "1..3",
+  "markdown.extension.list.indentationSize": "inherit",
+  "yaml.schemas": {
+    "file:///Users/vladimir/.vscode/extensions/atlassian.atlascode-2.10.12/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
+  },
+  "atlascode.bitbucket.enabled": true,
+  "atlascode.jira.enabled": false,
+  "terraform.languageServer.enable": true,
+  "terraform.languageServer.path": "",
+  "workbench.startupEditor": "none",
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "python.formatting.provider": "black",
+  "chatgpt.telemetry.disable": true,
+  "chatgpt.gpt3.apiKey": "",
+  "gitlens.hovers.annotations.over": "annotation",
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.codeLens.enabled": false,
+  "gitlens.currentLine.scrollable": false,
+  "c4.diagram.structurizr.enabled": true,
+  "c4.diagram.renderer": "structurizr",
+  "[c4]": {
+    "editor.autoIndent": "advanced"
+  },
+  "git.openRepositoryInParentFolders": "never",
+  "githubPullRequests.pullBranch": "never",
+  "flake8.args": ["--ignore=E203,E501,W503"],
+  "python.analysis.aiCodeActions": {},
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  }
+}

@@ -1,0 +1,54 @@
+###
+#   VSCode - Extensions
+###
+
+# Copilot
+vscode "github.copilot"
+vscode "github.copilot-chat"
+
+# Git & Github
+vscode "github.vscode-pull-request-github"
+vscode "eamodio.gitlens"
+
+# Formatting
+vscode "chouzz.vscode-better-align"
+vscode "editorconfig.editorconfig"
+vscode "esbenp.prettier-vscode"
+
+# Golang
+vscode "golang.go"
+
+# Terraform
+vscode "hashicorp.terraform"
+
+# Drawio
+vscode "hediet.vscode-drawio"
+
+# Json5 Syntax
+vscode "mrmlnc.vscode-json5"
+
+# Kubernetes
+vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
+
+# Makefile Syntax
+vscode "ms-vscode.makefile-tools"
+
+## Python
+vscode "ms-python.black-formatter"
+vscode "ms-python.debugpy"
+vscode "ms-python.flake8"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+
+# SVG support
+vscode "vitaliymaz.vscode-svg-previewer"
+
+# YAML support
+vscode "redhat.vscode-yaml"
+
+# Markdown support
+vscode "bierner.markdown-mermaid"
+vscode "davidanson.vscode-markdownlint"
+vscode "gera2ld.markmap-vscode"
+vscode "yzhang.markdown-all-in-one"
