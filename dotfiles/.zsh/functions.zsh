@@ -54,6 +54,18 @@ function getHostCertDates() {
     getHostCert "$@" 2>/dev/null | openssl x509 -noout -dates
 }
 
+# Get Certificate Dates from K8s Secret
+function getTLSSecretDetails() {
+    local secret=$1
+    local key=${2:=tls.crt}
+
+    kg secret $secret -o yaml | \
+        yq ".data.\"$key\"" | \
+        base64 -d | \
+        openssl x509 -subject -noout -dates
+}
+
+
 # Curl VirtualHost on IP
 function curlHost() {
     # curlHost https://domain.com/status 8.8.8.8 443
