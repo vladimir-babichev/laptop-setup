@@ -24,11 +24,11 @@ function dkh() {
 
 # Retrieve Virtual Host certificate
 function getHostCert() {
-    # getHostCert api.preprod.fusionfabric.cloud 40.85.126.186 443
-    # getHostCert api.preprod.fusionfabric.cloud 40.85.126.186:443
-    # getHostCert api.preprod.fusionfabric.cloud 40.85.126.186
-    # getHostCert api.preprod.fusionfabric.cloud:443
-    # getHostCert api.preprod.fusionfabric.cloud
+    # getHostCert api.domain.com 1.1.1.1 443
+    # getHostCert api.domain.com 1.1.1.1:443
+    # getHostCert api.domain.com 1.1.1.1
+    # getHostCert api.domain.com:443
+    # getHostCert api.domain.com
     local virtual_host=$1
     local server_addr=$2
     local server_port=$3
@@ -45,11 +45,11 @@ function getHostCert() {
 
 # Retrieve Virtual Host certificate
 function getHostCertDates() {
-    # getHostCertDates api.preprod.fusionfabric.cloud 40.85.126.186 443
-    # getHostCertDates api.preprod.fusionfabric.cloud 40.85.126.186:443
-    # getHostCertDates api.preprod.fusionfabric.cloud 40.85.126.186
-    # getHostCertDates api.preprod.fusionfabric.cloud:443
-    # getHostCertDates api.preprod.fusionfabric.cloud
+    # getHostCertDates api.domain.com 1.1.1.1 443
+    # getHostCertDates api.domain.com 1.1.1.1:443
+    # getHostCertDates api.domain.com 1.1.1.1
+    # getHostCertDates api.domain.com:443
+    # getHostCertDates api.domain.com
 
     getHostCert "$@" 2>/dev/null | openssl x509 -noout -dates
 }
@@ -68,10 +68,10 @@ function getTLSSecretDetails() {
 
 # Curl VirtualHost on IP
 function curlHost() {
-    # curlHost https://domain.com/status 8.8.8.8 443
-    # curlHost https://api.preprod.fusionfabric.cloud 8.8.8.8:443
-    # curlHost https://api.preprod.fusionfabric.cloud 40.85.126.186
-    # curlHost https://api.preprod.fusionfabric.cloud
+    # curlHost https://api.domain.com/status 1.1.1.1 443
+    # curlHost https://api.domain.com 1.1.1.1:443
+    # curlHost https://api.domain.com 1.1.1.1
+    # curlHost https://api.domain.com
     local url=$1
     local server_host_port=$2
     local server_port=$3
@@ -91,7 +91,7 @@ function curlHost() {
 
 
 
-# Port forwarding
+# SSH Port forwarding
 function pfwd() {
     if [ $# -eq 3 ]; then
         # pfwd 192.168.1.133:9200 11.12.13.14:9200 192.168.1.3
@@ -143,6 +143,8 @@ function pfwd() {
     echo ssh -f -N -L $lhost:$lport:$rhost:$rport $shost
 }
 
+
+# List SSH tunnels
 function pls() {
     local clNorm="\e[0m"
     local clRed="\x1B[01;91m"
@@ -156,13 +158,8 @@ function pls() {
     done <<< "$lst"
 }
 
-function man() {
-    env LESS_TERMCAP_mb=$'\E[01;31m' \
-    LESS_TERMCAP_md=$'\E[01;38;5;74m' \
-    LESS_TERMCAP_me=$'\E[0m' \
-    LESS_TERMCAP_se=$'\E[0m' \
-    LESS_TERMCAP_so=$'\E[38;5;246m' \
-    LESS_TERMCAP_ue=$'\E[0m' \
-    LESS_TERMCAP_us=$'\E[04;38;5;146m' \
-    man "$@"
+
+# Searches command history for pattern.
+function hgrep() {
+    fc -Dlim "*$@*" 1
 }

@@ -15,6 +15,7 @@ alias history='history -i'
 alias less='less -R'
 alias ll='eza --group-directories-first --icons -lag'
 alias ls='eza --group-directories-first --icons'
+alias man='batman'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias ncdu='ncdu --color dark -x'
 alias tree="tree -a -I .git --dirsfirst --sort name"
