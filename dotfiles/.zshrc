@@ -63,13 +63,16 @@ zinit light MichaelAquilina/zsh-you-should-use
 
 
 ###
-#   Load Shell
+#   Load custom zsh configurations
 ###
 
-[[ -f ~/.zsh/aliases.zsh ]] && source ~/.zsh/aliases.zsh
-[[ -f ~/.zsh/aliases.k8s.zsh ]] && source ~/.zsh/aliases.k8s.zsh
-[[ -f ~/.zsh/functions.zsh ]] && source ~/.zsh/functions.zsh
-[[ -f ~/.zsh/keybindings.zsh ]] && source ~/.zsh/keybindings.zsh
+ZSH_CONFIG_DIR="${HOME}/.config/zsh"
+
+if [[ -L "$ZSH_CONFIG_DIR" ]] || [[ -d "$ZSH_CONFIG_DIR" ]]; then
+    for config_file in ${ZSH_CONFIG_DIR}/*.zsh(N.:A); do
+        source "$config_file"
+    done
+fi
 
 eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
