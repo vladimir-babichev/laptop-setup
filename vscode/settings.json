@@ -86,5 +86,7 @@
     "plaintext": false,
     "markdown": true,
     "scminput": false
-  }
+  },
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', 'RobotoMono Nerd Font Mono'",
+  "security.workspace.trust.untrustedFiles": "open"
 }
