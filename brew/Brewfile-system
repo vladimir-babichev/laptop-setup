@@ -41,6 +41,7 @@ brew "go-task/tap/go-task"
 brew "gum"
 brew "jq"
 brew "lastpass-cli"
+brew "mas"
 brew "nvim"
 brew "pre-commit"
 brew "prometheus"
@@ -58,6 +59,7 @@ brew "zoxide"
 
 brew "azure-cli"
 brew "azure/kubelogin/kubelogin"
+brew "krew"
 
 
 ###
@@ -118,6 +120,7 @@ cask "vagrant"
 cask "visual-studio-code"
 cask "vivaldi"
 cask "wireshark"
+cask "zoom"
 
 
 ###

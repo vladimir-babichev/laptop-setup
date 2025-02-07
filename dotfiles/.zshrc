@@ -18,23 +18,24 @@ unsetopt beep              # be quiet!
 
 autoload -Uz +X compinit && compinit
 
+
 ###
 #   Brew
 ###
 
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
-eval "$(brew shellenv zsh)"
-
 export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
 export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH"
 export PATH="$(brew --prefix gnu-sed)/libexec/gnubin:$PATH"
 export PATH="$(brew --prefix gnu-tar)/libexec/gnubin:$PATH"
 export PATH="$(brew --prefix grep)/libexec/gnubin:$PATH"
 export PATH="~/bin:$PATH"
+eval "$(brew shellenv zsh)"
+
 
 ###
-# Zinit
+#   Zinit
 ###
 
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -60,6 +61,13 @@ zinit light wfxr/forgit
 
 export YSU_MESSAGE_POSITION="after"
 zinit light MichaelAquilina/zsh-you-should-use
+
+
+###
+#   Krew
+###
+
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 
 ###
