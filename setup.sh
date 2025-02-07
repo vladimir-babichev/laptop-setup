@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Fix permissions
+sudo chmod +a "user:${USER} allow list,add_file,search,add_subdirectory,delete_child,readattr,writeattr,readextattr,writeextattr,readsecurity,file_inherit,directory_inherit" /usr/local/bin
+
 # Install Homebrew if missing
 if ! command -v brew &> /dev/null; then
     echo "Installing Homebrew..."
@@ -86,6 +89,5 @@ fi
 exit 0
 
 # Configure Firefox plugins
-# Configure iTerm2
 # Configure access to finastra-platform with gh
 

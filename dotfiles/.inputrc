@@ -1,0 +1,6 @@
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e\e[D": backward-word
+"\e\e[C": forward-word
+
+set show-all-if-ambiguous on
