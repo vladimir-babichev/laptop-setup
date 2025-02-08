@@ -16,8 +16,8 @@ setopt hist_verify            # show command with history expansion to user befo
 
 unsetopt beep              # be quiet!
 
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 autoload -Uz +X compinit && compinit
-
 
 ###
 #   Brew

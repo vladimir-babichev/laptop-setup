@@ -4,6 +4,10 @@
 <dict>
 	<key>Default Bookmark Guid</key>
 	<string>1ABF92CF-8857-466E-9585-3993532ECEBA</string>
+	<key>DimBackgroundWindows</key>
+	<false/>
+	<key>DimOnlyText</key>
+	<false/>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
 	<key>HideMenuBarInFullscreen</key>
@@ -1248,6 +1252,8 @@
 	<true/>
 	<key>SoundForEsc</key>
 	<false/>
+	<key>SplitPaneDimmingAmount</key>
+	<real>0.057444740853658562</real>
 	<key>ToolbeltTools</key>
 	<array>
 		<string>Profiles</string>

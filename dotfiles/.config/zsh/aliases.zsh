@@ -59,4 +59,4 @@ alias dps='docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}
 #   Azure
 ###
 
-alias azl='az login -o table --only-show-errors'
+alias azl='az login -o none --only-show-errors'
