@@ -1,11 +1,14 @@
 # Dev Laptop Setup
 
-This repository provides a complete bootstrap solution for setting up a Dev laptop on macOS. It provides:
+Complete Dev Mac bootstrap:
 
-* Automated installation of system packages, VSCode extensions
-* Dotfiles linking and Zsh configuration using Zinit
-* Firefox and iTerm2 configurations
+* Homebrew Packages and Casks
+* Apps from Mac App Store
+* Dotfiles linking and Zsh configuration
+* Firefox extensions
+* iTerm2 configurations
 * Krew & Helm plugins installation
+* VSCode configuration, extensions, keybindings
 
 ## TL;DR
 
