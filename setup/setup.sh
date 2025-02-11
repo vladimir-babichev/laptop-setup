@@ -74,7 +74,7 @@ function install_system_packages() {
 
     msg "blue" "Installing Brew Packages..."
 
-    brew bundle --file brew/Brewfile-system
+    brew bundle --file "$ROOT_DIR/brew/Brewfile-system"
 
     msg "green" "Packages installed"
 }
@@ -108,7 +108,7 @@ function install_helm_plugins() {
     while read -r plugin; do
         msg "cyan" "  Installing: $plugin"
         helm plugin install "$plugin"
-    done <<<"$(yq -r '.plugins[]' "helm/plugins.yaml")"
+    done <<<"$(yq -r '.plugins[]' "$ROOT_DIR/helm/plugins.yaml")"
 
     msg "green" "Helm plugins installed"
 }
@@ -119,7 +119,7 @@ function install_krew_plugins() {
     while read -r plugin; do
         msg "cyan" "  Installing: $plugin"
         kubectl krew install "$plugin"
-    done <<< "$(yq -r '.plugins[] | .name' "krew/plugins.yaml")"
+    done <<< "$(yq -r '.plugins[] | .name' "$ROOT_DIR/krew/plugins.yaml")"
 
     msg "green" "Krew plugins installed"
 }
@@ -128,7 +128,7 @@ function configure_vscode() {
     msg "blue" "Configuring VSCode..."
 
     msg "cyan" "  Installing extensions..."
-    brew bundle --file brew/Brewfile-vscode
+    brew bundle --file "$ROOT_DIR/brew/Brewfile-vscode"
 
     msg "cyan" "  Configuring..."
     for file in "$ROOT_DIR/vscode"/*; do
@@ -179,7 +179,7 @@ function install_firefox_extension() {
 function install_firefox_extensions() {
     msg "blue" "Installing Firefox extensions..."
 
-    extensions=($(yq -r '.extensions[] | [.slug, .guid] | @tsv' "firefox/extensions.yaml"))
+    extensions=($(yq -r '.extensions[] | [.slug, .guid] | @tsv' "$ROOT_DIR/firefox/extensions.yaml"))
     for ((i=0; i<${#extensions[@]}; i+=2)); do
         slug="${extensions[i]}"
         guid="${extensions[i+1]}"
@@ -208,7 +208,7 @@ function configure_iterm() {
 function install_mas_apps() {
     msg "blue" "Installing Mac App Store applications..."
 
-    brew bundle --file brew/Brewfile-mas
+    brew bundle --file "$ROOT_DIR/brew/Brewfile-mas"
 
     msg "green" "Mac App Store applications installed"
 }
