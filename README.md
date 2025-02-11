@@ -46,6 +46,7 @@ Options:
   -k, --krew          Install Krew plugins
   -m, --helm          Install Helm plugins
   -p, --packages      Install default packages with Homebrew
+  -s, --mas           Install Mac App Store applications
   -v, --vscode        Install VSCode extensions, keybindings, settings
   -z, --zsh           Install Zinit, link dotfiles, configure ZSH
   -h, --help          Show this message and exit
