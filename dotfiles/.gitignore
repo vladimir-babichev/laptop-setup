@@ -1,0 +1,23 @@
+# A global gitignore configuration file
+
+# Ignore Mac OS X files
+.DS_Store
+
+# Ignore vscode files
+.vscode
+
+# Ignore Terraform working files
+.terraform
+backend.tf
+
+# Ignore my own Development Notes
+.devnotes
+
+# Ignore dev Terraform variables
+my.tfvars
+
+# Ignore all python cache files
+*__pycache__/
+
+# Ignore .env files
+.env
