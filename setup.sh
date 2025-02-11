@@ -6,6 +6,13 @@ ITERM_PLIST="$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 MOZILLA_ADDONS_API="https://addons.mozilla.org/api/v5"
 VSCODE_DIR="$HOME/Library/Application Support/Code/User"
 
+DO_FIREFOX=""
+DO_HELM=""
+DO_ITERM=""
+DO_KREW=""
+DO_PACKAGES=""
+DO_VSCODE=""
+DO_ZSH=""
 
 declare -A COLORS=(
     [background]="#282c34"
@@ -43,22 +50,33 @@ function usage() {
     echo "  -h, --help          Show this message and exit"
     echo ""
     echo "Examples:"
-    echo "  $SCRIPT --packages --zsh --helm"
+    echo "  ./$SCRIPT --packages --zsh --helm"
     echo ""
+
     exit "$EXIT_CODE"
 }
 
 function fix_permissions() {
+    msg "blue" "Fixing /usr/local/bin permissions..."
+
     sudo chmod +a "user:${USER} allow list,add_file,search,add_subdirectory,delete_child,readattr,writeattr,readextattr,writeextattr,readsecurity,file_inherit,directory_inherit" /usr/local/bin
+
+    msg "green" "Permissions set"
 }
 
 function install_system_packages() {
     fix_permissions
 
+    msg "blue" "Installing Brew Packages..."
+
     brew bundle --file brew/Brewfile-system
+
+    msg "green" "Packages installed"
 }
 
 function configure_zsh() {
+    msg "blue" "Configuring ZSH..."
+
     # Install Zinit
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
     zsh -i -c 'zinit self-update'
@@ -67,29 +85,39 @@ function configure_zsh() {
     find "$SCRIPT_DIR/dotfiles" -type f -depth 1 -exec ln -sf "$PWD/{}" "$HOME/" \;
     find "$SCRIPT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#dotfiles/}"' _ {} \;
     find "$SCRIPT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "$PWD/{}" "$HOME/${1#dotfiles/}"' _ {} \;
+
+    msg "green" "ZSH configured. Please restart your shell"
 }
 
 function install_helm_plugins() {
     msg "blue" "Installing Helm plugins..."
 
     while read -r plugin; do
-        msg "cyan" "Installing: $plugin"
+        msg "cyan" "  Installing: $plugin"
         helm plugin install "$plugin"
     done <<<"$(yq -r '.plugins[]' "helm/plugins.yaml")"
+
+    msg "green" "Helm plugins installed"
 }
 
 function install_krew_plugins() {
     msg "blue" "Installing Krew plugins..."
 
     while read -r plugin; do
-        msg "cyan" "Installing: $plugin"
+        msg "cyan" "  Installing: $plugin"
         kubectl krew install "$plugin"
     done <<< "$(yq -r '.plugins[] | .name' "krew/plugins.yaml")"
+
+    msg "green" "Krew plugins installed"
 }
 
 function configure_vscode() {
+    msg "blue" "Configuring VSCode..."
+
+    msg "cyan" "  Installing extensions..."
     brew bundle --file brew/Brewfile-vscode
 
+    msg "cyan" "  Configuring..."
     for file in "$SCRIPT_DIR/vscode"/*; do
         filename=$(basename "$file")
         if [[ -f "$VSCODE_DIR/$filename" ]]; then
@@ -97,9 +125,11 @@ function configure_vscode() {
         fi
         ln -sf "$file" "$VSCODE_DIR/"
     done
+
+    msg "green" "VSCode configured"
 }
 
-discover_firefox_extensions() {
+function discover_firefox_extensions() {
     local extension_name="$1"
     local guid="$2"
 
@@ -113,38 +143,43 @@ discover_firefox_extensions() {
         .current_version.file.url'
 }
 
-install_firefox_extension() {
+function install_firefox_extension() {
     local name="$1"
     local guid="$2"
     local url=$(discover_firefox_extensions "$name" "$guid")
 
     if [[ -n "$url" ]]; then
         TEMP_XPI=$(mktemp).xpi
+
         gum spin --spinner dot --title "Downloading $name..." -- \
             curl -L "$url" -o "$TEMP_XPI"
         open -a Firefox "$TEMP_XPI"
-        gum confirm "Did you complete the installation of $name in Firefox?"
+
+        gum confirm "Did you complete $name installation in Firefox?"
+
         rm -f "$TEMP_XPI"
     else
         msg "red" "Extension '$name' not found"
     fi
 }
 
-install_firefox_extensions() {
+function install_firefox_extensions() {
     msg "blue" "Installing Firefox extensions..."
-    [[ -f "$SCRIPT_DIR/firefox/extensions.yaml" ]] || return 1
 
     extensions=($(yq -r '.extensions[] | [.slug, .guid] | @tsv' "firefox/extensions.yaml"))
     for ((i=0; i<${#extensions[@]}; i+=2)); do
         slug="${extensions[i]}"
         guid="${extensions[i+1]}"
-        msg "cyan" "Installing: $slug"
+        msg "cyan" "  Installing: $slug"
         install_firefox_extension "$slug" "$guid"
     done
+
+    msg "green" "Firefox configured"
 }
 
 function configure_iterm() {
     msg "blue" "Configuring iTerm2..."
+
     if [[ -f "$ITERM_PLIST" ]]; then
         cp -f "$ITERM_PLIST" "${ITERM_PLIST}.backup"
     fi
@@ -158,35 +193,7 @@ function configure_iterm() {
 }
 
 
-# CONFIG_OPTIONS=$(
-#     gum choose --no-limit --selected=* --header "What to configure?" \
-#         "Default packages" \
-#         "Firefox Extensions" \
-#         "iTerm2" \
-#         "VSCode" \
-#         "ZSH"
-# )
-
-# if [[ $CONFIG_OPTIONS == *"VSCode"* ]]; then
-#     VSCODE_CONFIG=$(
-#         gum choose --no-limit --selected=* --header "VSCode configuration" \
-#         "Install plugins" \
-#         "Setup keybindings" \
-#         "Override settings"
-#     )
-# fi
-
-
-function main() {
-    local DO_FIREFOX=""
-    local DO_HELM=""
-    local DO_ITERM=""
-    local DO_KREW=""
-    local DO_PACKAGES=""
-    local DO_VSCODE=""
-    local DO_ZSH=""
-
-    # Capture arguments
+function parse_arguments() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
             -a|--all)       DO_ALL="1";;
@@ -202,6 +209,41 @@ function main() {
         esac
         shift
     done
+}
+
+
+function prompt_user() {
+    mapfile -t SELECTED < <(
+        gum choose --no-limit --selected=* --header "Select setup items:" \
+            "Configure iTerm2" \
+            "Configure VSCode" \
+            "Configure ZSH" \
+            "Install Firefox Extensions" \
+            "Install Helm Plugins" \
+            "Install Krew Plugins" \
+            "Install System Packages"
+    )
+
+    for item in "${SELECTED[@]}"; do
+        case "$item" in
+            **iTerm2**)  DO_ITERM="1" ;;
+            **VSCode**)  DO_VSCODE="1" ;;
+            **ZSH**)     DO_ZSH="1" ;;
+            **Firefox**) DO_FIREFOX="1" ;;
+            **Helm**)    DO_HELM="1" ;;
+            **Krew**)    DO_KREW="1" ;;
+            **System**)  DO_PACKAGES="1" ;;
+        esac
+    done
+}
+
+
+function main() {
+    if [[ $# -gt 0 ]]; then
+        parse_arguments "$@"
+    else
+        prompt_user
+    fi
 
     [[ -n "$DO_PACKAGES" || -n "$DO_ALL" ]] && install_system_packages
     [[ -n "$DO_ZSH"      || -n "$DO_ALL" ]] && configure_zsh
