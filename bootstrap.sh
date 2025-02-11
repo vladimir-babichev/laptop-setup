@@ -1,63 +1,73 @@
 #!/usr/bin/env bash
 
 set -o errexit
+set -o nounset
 
-REPO_URL=https://github.com/protiumx/.dotfiles.git
-REPO_PATH="$HOME/.dotfiles"
+REPO_URL="https://github.com/vladimir-babichev/laptop-setup.git"
+REPO_PATH="$HOME/laptop-setup"
 
-reset_color=$(tput sgr 0)
+# Color definitions
+declare -A COLORS=(
+    [background]="#282c34"
+    [foreground]="#dcdfe4"
+    [red]="#e06c75"
+    [green]="#98c379"
+    [yellow]="#e5c07b"
+    [blue]="#61afef"
+    [purple]="#c678dd"
+    [cyan]="#56b6c2"
+)
 
-info() {
-	printf "%s[*] %s%s\n" "$(tput setaf 4)" "$1" "$reset_color"
+function msg() {
+    local type=$1
+    local text=$2
+
+    printf "%b[%s] %s%b\n" "\033[${COLORS[$type]}m" "$(date '+%H:%M:%S')" "$text" "\033[0m"
 }
 
-success() {
-	printf "%s[*] %s%s\n" "$(tput setaf 2)" "$1" "$reset_color"
+function install_xcode() {
+    if ! xcode-select -p &>/dev/null; then
+        msg "blue" "Installing xCode Command Line Tools..."
+
+        xcode-select --install
+    fi
+
+	msg "green" "xCode Command Line Tools installed"
 }
 
-err() {
-	printf "%s[*] %s%s\n" "$(tput setaf 1)" "$1" "$reset_color"
+function install_homebrew() {
+    if ! command -v brew &>/dev/null; then
+        msg "blue" "Installing Homebrew..."
+
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+	brew install git gum
+
+	msg "green" "Homebrew installed"
 }
 
-warn() {
-	printf "%s[*] %s%s\n" "$(tput setaf 3)" "$1" "$reset_color"
+function clone_repo() {
+    if [[ ! -d "$REPO_PATH" ]]; then
+        msg "blue" "Cloning laptop-setup repository..."
+
+        mkdir -p "$REPO_PATH"
+        git clone "$REPO_URL" "$REPO_PATH"
+    fi
+
+	msg "green" "Repository cloned"
 }
 
-install_xcode() {
-	if xcode-select -p >/dev/null; then
-		warn "xCode Command Line Tools already installed"
-	else
-		info "Installing xCode Command Line Tools..."
-		xcode-select --install
-		sudo xcodebuild -license accept
-	fi
+function main() {
+    msg "blue" "Starting laptop bootstrap..."
+
+    install_xcode
+    install_homebrew
+    clone_repo
+
+    msg "blue" "Running setup script..."
+    cd "$REPO_PATH"
+    ./setup.sh
 }
 
-install_homebrew() {
-	export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-	if hash brew &>/dev/null; then
-		warn "Homebrew already installed"
-	else
-		info "Installing homebrew..."
-		sudo --validate # reset `sudo` timeout to use Homebrew install in noninteractive mode
-		NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-	fi
-}
-
-info "####### dotfiles #######"
-read -p "Press enter to start:"
-info "Bootstraping..."
-
-install_xcode
-install_homebrew
-
-info "Installing Git & Gum"
-brew install git gum
-
-info "Cloning .dotfiles repo from $REPO_URL into $REPO_PATH"
-git clone "$REPO_URL" "$REPO_PATH"
-
-info "Change path to $REPO_PATH"
-cd "$REPO_PATH" >/dev/null
-
-./setup.sh
+main "$@"
