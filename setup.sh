@@ -96,23 +96,24 @@ install_firefox_extension() {
         gum spin --spinner dot --title "Downloading $name..." -- \
             curl -L "$url" -o "$TEMP_XPI"
         open -a Firefox "$TEMP_XPI"
-
+        gum confirm "Did you complete the installation of $name in Firefox?"
+        rm -f "$TEMP_XPI"
     else
-        echo "Extension '$name' not found"
+        msg "red" "Extension '$name' not found"
     fi
-
-    sleep 10
-    rm -f "$TEMP_XPI"
 }
 
 install_firefox_extensions() {
     msg "blue" "Installing Firefox extensions..."
     [[ -f "$SCRIPT_DIR/firefox/extensions.yaml" ]] || return 1
 
-    while IFS=$'\t' read -r slug guid; do
+    extensions=($(yq -r '.extensions[] | [.slug, .guid] | @tsv' "firefox/extensions.yaml"))
+    for ((i=0; i<${#extensions[@]}; i+=2)); do
+        slug="${extensions[i]}"
+        guid="${extensions[i+1]}"
         msg "cyan" "Installing: $slug"
         install_firefox_extension "$slug" "$guid"
-    done <<<"$(yq -r '.extensions[] | [.slug, .guid] | @tsv' "firefox/extensions.yaml")"
+    done
 }
 
 function configure_iterm() {
