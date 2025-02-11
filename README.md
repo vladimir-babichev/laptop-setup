@@ -13,7 +13,7 @@ Complete Dev Mac bootstrap:
 ## TL;DR
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/vladimir-babichev/laptop-setup/main/bootstrap.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/vladimir-babichev/laptop-setup/main/setup/bootstrap.sh)
 ```
 See [`bootstrap.sh`](bootstrap.sh) for details.
 
@@ -24,7 +24,7 @@ See [`bootstrap.sh`](bootstrap.sh) for details.
 Ideal for clean laptop setup.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/vladimir-babichev/laptop-setup/main/bootstrap.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/vladimir-babichev/laptop-setup/main/setup/bootstrap.sh)
 ```
 See [`bootstrap.sh`](bootstrap.sh) for details.
 

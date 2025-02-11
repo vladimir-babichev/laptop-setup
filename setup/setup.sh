@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+: "${ROOT_DIR:="$(git rev-parse --show-toplevel)"}"
+: "${SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"}"
 
 ITERM_PLIST="$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 MOZILLA_ADDONS_API="https://addons.mozilla.org/api/v5"
@@ -11,6 +12,7 @@ DO_HELM=""
 DO_ITERM=""
 DO_KREW=""
 DO_MAS=""
+DO_MACOS=""
 DO_PACKAGES=""
 DO_VSCODE=""
 DO_ZSH=""
@@ -45,6 +47,7 @@ function usage() {
     echo "  -i, --iterm         Configure iTerm2"
     echo "  -k, --krew          Install Krew plugins"
     echo "  -m, --helm          Install Helm plugins"
+    echo "  -o, --macos         Configure macOS settings"
     echo "  -p, --packages      Install default packages with Homebrew"
     echo "  -s, --mas           Install Mac App Store applications"
     echo "  -v, --vscode        Install VSCode extensions, keybindings, settings"
@@ -84,11 +87,19 @@ function configure_zsh() {
     zsh -i -c 'zinit self-update'
 
     # Link configuration files
-    find "$SCRIPT_DIR/dotfiles" -type f -depth 1 -exec ln -sf "$PWD/{}" "$HOME/" \;
-    find "$SCRIPT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#dotfiles/}"' _ {} \;
-    find "$SCRIPT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "$PWD/{}" "$HOME/${1#dotfiles/}"' _ {} \;
+    find "$ROOT_DIR/dotfiles" -type f -depth 1 -exec ln -sf "$PWD/{}" "$HOME/" \;
+    find "$ROOT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#dotfiles/}"' _ {} \;
+    find "$ROOT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "$PWD/{}" "$HOME/${1#dotfiles/}"' _ {} \;
 
     msg "green" "ZSH configured. Please restart your shell"
+}
+
+function configure_macos() {
+    msg "blue" "Configuring macOS..."
+
+    $SCRIPT_DIR/macos.sh
+
+    msg "green" "macOS configured"
 }
 
 function install_helm_plugins() {
@@ -120,7 +131,7 @@ function configure_vscode() {
     brew bundle --file brew/Brewfile-vscode
 
     msg "cyan" "  Configuring..."
-    for file in "$SCRIPT_DIR/vscode"/*; do
+    for file in "$ROOT_DIR/vscode"/*; do
         filename=$(basename "$file")
         if [[ -f "$VSCODE_DIR/$filename" ]]; then
             cp -f "$VSCODE_DIR/$filename" "$VSCODE_DIR/$filename.backup"
@@ -187,7 +198,7 @@ function configure_iterm() {
     fi
 
     defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$SCRIPT_DIR/iTerm2"
+    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$ROOT_DIR/iTerm2"
     defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile_selection -integer 2
     defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile -bool true
 
@@ -210,6 +221,7 @@ function parse_arguments() {
             -i|--iterm)     DO_ITERM="1" ;;
             -k|--krew)      DO_KREW="1" ;;
             -m|--helm)      DO_HELM="1" ;;
+            -o|--macos)     DO_MACOS="1" ;;
             -p|--packages)  DO_PACKAGES="1" ;;
             -s|--mas)       DO_MAS="1" ;;
             -v|--vscode)    DO_VSCODE="1" ;;
@@ -226,6 +238,7 @@ function prompt_user() {
     mapfile -t SELECTED < <(
         gum choose --no-limit --selected=* --header "Select setup items:" \
             "Configure iTerm2" \
+            "Configure macOS" \
             "Configure VSCode" \
             "Configure ZSH" \
             "Install Firefox Extensions" \
@@ -242,6 +255,7 @@ function prompt_user() {
             **Helm**)     DO_HELM="1" ;;
             **iTerm2**)   DO_ITERM="1" ;;
             **Krew**)     DO_KREW="1" ;;
+            **macOS**)    DO_MACOS="1" ;;
             **System**)   DO_PACKAGES="1" ;;
             **VSCode**)   DO_VSCODE="1" ;;
             **ZSH**)      DO_ZSH="1" ;;
@@ -265,6 +279,7 @@ function main() {
     [[ -n "$DO_FIREFOX"  || -n "$DO_ALL" ]] && install_firefox_extensions
     [[ -n "$DO_ITERM"    || -n "$DO_ALL" ]] && configure_iterm
     [[ -n "$DO_MAS"      || -n "$DO_ALL" ]] && install_mas_apps
+    [[ -n "$DO_MACOS"    || -n "$DO_ALL" ]] && configure_macos
 }
 
 main "$@"

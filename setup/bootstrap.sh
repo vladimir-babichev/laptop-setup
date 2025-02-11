@@ -66,8 +66,9 @@ function main() {
     clone_repo
 
     msg "blue" "Running setup script..."
-    cd "$REPO_PATH"
-    ./setup.sh
+
+    cd "$REPO_PATH/setup"
+    ./setup.sh --all
 }
 
 main "$@"

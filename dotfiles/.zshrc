@@ -57,7 +57,9 @@ autoload -Uz _zinit
 
 zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light wfxr/forgit
+zinit light zsh-users/zsh-autosuggestions
 # zinit light marlonrichert/zsh-autocomplete
+# zinit light Aloxaf/fzf-tab
 
 export YSU_MESSAGE_POSITION="after"
 zinit light MichaelAquilina/zsh-you-should-use
