@@ -1,0 +1,24 @@
+extensions:
+  # Account management
+  - slug: multi-account-containers
+    guid: "@testpilot-containers"
+
+  # Privacy
+  - slug: ublock-origin
+    guid: uBlock0@raymondhill.net
+  - slug: privacy-badger17
+    guid: jid1-MnnxcxisBPnSXQ@jetpack
+  - slug: duckduckgo-for-firefox
+    guid: jid1-ZAdIEUB7XOzOJw@jetpack
+  - slug: facebook-container
+    guid: "@contain-facebook"
+
+  # Security
+  - slug: lastpass-password-manager
+    guid: support@lastpass.com
+
+  # Misc
+  - slug: grammarly-1
+    guid: 87677a2c52b84ad3a151a4a72f5bd3c4@jetpack
+  - slug: tampermonkey
+    guid: firefox@tampermonkey.net

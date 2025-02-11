@@ -1,0 +1,5 @@
+plugins:
+  - name: access-matrix
+    docs: https://github.com/corneliusweig/rakkess/blob/master/doc/USAGE.md
+  - name: get-all
+    docs: https://github.com/corneliusweig/ketall

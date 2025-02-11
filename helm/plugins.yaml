@@ -1,0 +1,7 @@
+plugins:
+  - https://github.com/dadav/helm-schema
+  - https://github.com/databus23/helm-diff
+  - https://github.com/datreeio/helm-datree
+  - https://github.com/helm-unittest/helm-unittest
+  - https://github.com/jtyr/kubeconform-helm
+  - https://github.com/salesforce/helm-starter.git
