@@ -10,6 +10,7 @@ DO_FIREFOX=""
 DO_HELM=""
 DO_ITERM=""
 DO_KREW=""
+DO_MAS=""
 DO_PACKAGES=""
 DO_VSCODE=""
 DO_ZSH=""
@@ -45,6 +46,7 @@ function usage() {
     echo "  -k, --krew          Install Krew plugins"
     echo "  -m, --helm          Install Helm plugins"
     echo "  -p, --packages      Install default packages with Homebrew"
+    echo "  -s, --mas           Install Mac App Store applications"
     echo "  -v, --vscode        Install VSCode extensions, keybindings, settings"
     echo "  -z, --zsh           Install Zinit, link dotfiles, configure ZSH"
     echo "  -h, --help          Show this message and exit"
@@ -192,6 +194,13 @@ function configure_iterm() {
     msg "green" "iTerm2 configured. Please restart iTerm2"
 }
 
+function install_mas_apps() {
+    msg "blue" "Installing Mac App Store applications..."
+
+    brew bundle --file brew/Brewfile-mas
+
+    msg "green" "Mac App Store applications installed"
+}
 
 function parse_arguments() {
     while [[ $# -gt 0 ]]; do
@@ -202,6 +211,7 @@ function parse_arguments() {
             -k|--krew)      DO_KREW="1" ;;
             -m|--helm)      DO_HELM="1" ;;
             -p|--packages)  DO_PACKAGES="1" ;;
+            -s|--mas)       DO_MAS="1" ;;
             -v|--vscode)    DO_VSCODE="1" ;;
             -z|--zsh)       DO_ZSH="1" ;;
             -h|--help)      usage 0 ;;
@@ -221,18 +231,20 @@ function prompt_user() {
             "Install Firefox Extensions" \
             "Install Helm Plugins" \
             "Install Krew Plugins" \
+            "Install AppStore Packages" \
             "Install System Packages"
     )
 
     for item in "${SELECTED[@]}"; do
         case "$item" in
-            **iTerm2**)  DO_ITERM="1" ;;
-            **VSCode**)  DO_VSCODE="1" ;;
-            **ZSH**)     DO_ZSH="1" ;;
-            **Firefox**) DO_FIREFOX="1" ;;
-            **Helm**)    DO_HELM="1" ;;
-            **Krew**)    DO_KREW="1" ;;
-            **System**)  DO_PACKAGES="1" ;;
+            **AppStore**) DO_MAS="1" ;;
+            **Firefox**)  DO_FIREFOX="1" ;;
+            **Helm**)     DO_HELM="1" ;;
+            **iTerm2**)   DO_ITERM="1" ;;
+            **Krew**)     DO_KREW="1" ;;
+            **System**)   DO_PACKAGES="1" ;;
+            **VSCode**)   DO_VSCODE="1" ;;
+            **ZSH**)      DO_ZSH="1" ;;
         esac
     done
 }
@@ -252,6 +264,7 @@ function main() {
     [[ -n "$DO_VSCODE"   || -n "$DO_ALL" ]] && configure_vscode
     [[ -n "$DO_FIREFOX"  || -n "$DO_ALL" ]] && install_firefox_extensions
     [[ -n "$DO_ITERM"    || -n "$DO_ALL" ]] && configure_iterm
+    [[ -n "$DO_MAS"      || -n "$DO_ALL" ]] && install_mas_apps
 }
 
 main "$@"
