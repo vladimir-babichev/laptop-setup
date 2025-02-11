@@ -1,26 +1,51 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
 ITERM_PLIST="$HOME/Library/Preferences/com.googlecode.iterm2.plist"
 MOZILLA_ADDONS_API="https://addons.mozilla.org/api/v5"
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 VSCODE_DIR="$HOME/Library/Application Support/Code/User"
-ZSH_CONFIG_DIR="$HOME/.config/zsh"
 
+
+declare -A COLORS=(
+    [background]="#282c34"
+    [foreground]="#dcdfe4"
+    [red]="#e06c75"
+    [green]="#98c379"
+    [yellow]="#e5c07b"
+    [blue]="#61afef"
+    [purple]="#c678dd"
+    [cyan]="#56b6c2"
+)
+
+function msg() {
+    local type=$1
+    local text=$2
+    gum style --foreground "${COLORS[$type]}" "[$(date '+%H:%M:%S')] $text"
+}
 
 function usage() {
-    cat <<EOF
-Usage: $(basename "$0") [options]
-Options:
-    -a  Install all components
-    -b  Install brew packages
-    -f  Install Firefox extensions
-    -h  Install Helm plugins
-    -i  Configure iTerm2
-    -k  Install Krew plugins
-    -v  Configure VSCode
-    -z  Configure ZSH
-EOF
-    exit 0
+    local SCRIPT="${0##*/}"
+    local EXIT_CODE="${1:-0}"
+
+    echo "Usage: $SCRIPT [options]"
+    echo ""
+    echo "This script bootstraps a Dev laptop."
+    echo "Options:"
+    echo "  -a, --all           Install everything"
+    echo "  -f, --firefox       Install Firefox extensions"
+    echo "  -i, --iterm         Configure iTerm2"
+    echo "  -k, --krew          Install Krew plugins"
+    echo "  -m, --helm          Install Helm plugins"
+    echo "  -p, --packages      Install default packages with Homebrew"
+    echo "  -v, --vscode        Install VSCode extensions, keybindings, settings"
+    echo "  -z, --zsh           Install Zinit, link dotfiles, configure ZSH"
+    echo "  -h, --help          Show this message and exit"
+    echo ""
+    echo "Examples:"
+    echo "  $SCRIPT --packages --zsh --helm"
+    echo ""
+    exit "$EXIT_CODE"
 }
 
 function fix_permissions() {
@@ -28,6 +53,8 @@ function fix_permissions() {
 }
 
 function install_system_packages() {
+    fix_permissions
+
     brew bundle --file brew/Brewfile-system
 }
 
@@ -131,23 +158,58 @@ function configure_iterm() {
 }
 
 
-CONFIG_OPTIONS=$(
-    gum choose --no-limit --selected=* --header "What to configure?" \
-        "Default packages" \
-        "Firefox Extensions" \
-        "iTerm2" \
-        "VSCode" \
-        "ZSH"
-)
+# CONFIG_OPTIONS=$(
+#     gum choose --no-limit --selected=* --header "What to configure?" \
+#         "Default packages" \
+#         "Firefox Extensions" \
+#         "iTerm2" \
+#         "VSCode" \
+#         "ZSH"
+# )
 
-if [[ $CONFIG_OPTIONS == *"VSCode"* ]]; then
-    VSCODE_CONFIG=$(
-        gum choose --no-limit --selected=* --header "VSCode configuration" \
-        "Install plugins" \
-        "Setup keybindings" \
-        "Override settings"
-    )
-fi
+# if [[ $CONFIG_OPTIONS == *"VSCode"* ]]; then
+#     VSCODE_CONFIG=$(
+#         gum choose --no-limit --selected=* --header "VSCode configuration" \
+#         "Install plugins" \
+#         "Setup keybindings" \
+#         "Override settings"
+#     )
+# fi
 
-# Configure access to finastra-platform with gh
 
+function main() {
+    local DO_FIREFOX=""
+    local DO_HELM=""
+    local DO_ITERM=""
+    local DO_KREW=""
+    local DO_PACKAGES=""
+    local DO_VSCODE=""
+    local DO_ZSH=""
+
+    # Capture arguments
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -a|--all)       DO_ALL="1";;
+            -f|--firefox)   DO_FIREFOX="1" ;;
+            -i|--iterm)     DO_ITERM="1" ;;
+            -k|--krew)      DO_KREW="1" ;;
+            -m|--helm)      DO_HELM="1" ;;
+            -p|--packages)  DO_PACKAGES="1" ;;
+            -v|--vscode)    DO_VSCODE="1" ;;
+            -z|--zsh)       DO_ZSH="1" ;;
+            -h|--help)      usage 0 ;;
+            *)              usage 1 ;;
+        esac
+        shift
+    done
+
+    [[ -n "$DO_PACKAGES" || -n "$DO_ALL" ]] && install_system_packages
+    [[ -n "$DO_ZSH"      || -n "$DO_ALL" ]] && configure_zsh
+    [[ -n "$DO_KREW"     || -n "$DO_ALL" ]] && install_krew_plugins
+    [[ -n "$DO_HELM"     || -n "$DO_ALL" ]] && install_helm_plugins
+    [[ -n "$DO_VSCODE"   || -n "$DO_ALL" ]] && configure_vscode
+    [[ -n "$DO_FIREFOX"  || -n "$DO_ALL" ]] && install_firefox_extensions
+    [[ -n "$DO_ITERM"    || -n "$DO_ALL" ]] && configure_iterm
+}
+
+main "$@"
