@@ -87,9 +87,9 @@ function configure_zsh() {
     zsh -i -c 'zinit self-update'
 
     # Link configuration files
-    find "$ROOT_DIR/dotfiles" -type f -depth 1 -exec ln -sf "$PWD/{}" "$HOME/" \;
-    find "$ROOT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#dotfiles/}"' _ {} \;
-    find "$ROOT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "$PWD/{}" "$HOME/${1#dotfiles/}"' _ {} \;
+    find "$ROOT_DIR/dotfiles" -type f -depth 1 -exec ln -sf "{}" "$HOME/" \;
+    find "$ROOT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#*dotfiles/}"' _ {} \;
+    find "$ROOT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "{}" "$HOME/${1#*dotfiles/}"' _ {} \;
 
     msg "green" "ZSH configured. Please restart your shell"
 }
