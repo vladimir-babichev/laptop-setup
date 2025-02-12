@@ -68,6 +68,7 @@ brew "krew"
 
 brew "chart-testing"
 brew "checkov"
+brew "dldash/core/docker-color-output"
 brew "docker"
 brew "fluxcd/tap/flux"
 brew "helm"

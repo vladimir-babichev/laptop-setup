@@ -52,8 +52,9 @@ alias gst='git status'
 #   Docker
 ###
 
+alias di='docker images "$@" | docker-color-output'
 alias dec='docker exec -ti'
-alias dps='docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias dps='docker ps --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}" | docker-color-output'
 
 ###
 #   Azure
