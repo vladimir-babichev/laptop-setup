@@ -89,6 +89,7 @@ function configure_zsh() {
     # Link configuration files
     find "$ROOT_DIR/dotfiles" -type f -depth 1 -exec ln -sf "{}" "$HOME/" \;
     find "$ROOT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#*dotfiles/}"' _ {} \;
+    # shellcheck disable=SC2156
     find "$ROOT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "{}" "$HOME/${1#*dotfiles/}"' _ {} \;
 
     msg "green" "ZSH configured. Please restart your shell"
@@ -97,7 +98,7 @@ function configure_zsh() {
 function configure_macos() {
     msg "blue" "Configuring macOS..."
 
-    $SCRIPT_DIR/macos.sh
+    "$SCRIPT_DIR/macos.sh"
 
     msg "green" "macOS configured"
 }
@@ -159,7 +160,9 @@ function discover_firefox_extensions() {
 function install_firefox_extension() {
     local name="$1"
     local guid="$2"
-    local url=$(discover_firefox_extensions "$name" "$guid")
+    local url
+
+    url=$(discover_firefox_extensions "$name" "$guid")
 
     if [[ -n "$url" ]]; then
         TEMP_XPI=$(mktemp).xpi
@@ -179,6 +182,7 @@ function install_firefox_extension() {
 function install_firefox_extensions() {
     msg "blue" "Installing Firefox extensions..."
 
+    # shellcheck disable=SC2207
     extensions=($(yq -r '.extensions[] | [.slug, .guid] | @tsv' "$ROOT_DIR/firefox/extensions.yaml"))
     for ((i=0; i<${#extensions[@]}; i+=2)); do
         slug="${extensions[i]}"

@@ -1,0 +1,6 @@
+# # MD013 - Line length
+# MD013: false
+
+# MD024 - Multiple headings with the same content
+MD024:
+  siblings_only: true
