@@ -15,6 +15,7 @@ Complete Dev Mac bootstrap:
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/vladimir-babichev/laptop-setup/main/setup/bootstrap.sh)
 ```
+
 See [`bootstrap.sh`](bootstrap.sh) for details.
 
 ## Usage
@@ -26,6 +27,7 @@ Ideal for clean laptop setup.
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/vladimir-babichev/laptop-setup/main/setup/bootstrap.sh)
 ```
+
 See [`bootstrap.sh`](bootstrap.sh) for details.
 
 ### Parametrised installation
@@ -94,7 +96,6 @@ git clone https://github.com/vladimir-babichev/laptop-setup.git
 | `fn` + `→`          | Move to the end of the line          |
 | `Ctrl` + `R`        | Fuzzy search across history          |
 
-
 ### iTerm2
 
 | Shortcut                | Command                                  |
@@ -110,7 +111,6 @@ git clone https://github.com/vladimir-babichev/laptop-setup.git
 | `⌘` + `]` , `⌘` + `[`   | Go to Split Pane by Order of Use         |
 | `⌘` + `←`               | Previous Tab                             |
 | `⌘` + `→`               | Next Tab                                 |
-
 
 ### VSCode
 

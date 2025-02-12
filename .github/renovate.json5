@@ -1,0 +1,19 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  configMigration: true,
+  extends: [
+    "config:recommended",
+    ":enablePreCommit",
+    ":enableRenovate",
+    ":semanticCommits",
+    ":separatePatchReleases",
+  ],
+  bumpVersion: "minor",
+  packageRules: [
+    // Automerge pre-commit and GitHub Actions updates
+    {
+      matchManagers: ["github-actions", "pre-commit"],
+      automerge: true,
+    },
+  ],
+}
