@@ -9,6 +9,8 @@ $kubernetes\
 $package\
 $docker_context\
 $fill\
+$nix_shell\
+$python\
 $git_branch\
 $git_commit\
 $git_metrics\
@@ -96,6 +98,14 @@ home_symbol = "~"
 success_symbol = "[[❯](green)](fg)"
 error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
+
+[nix_shell]
+impure_msg = 'devbox'
+symbol = '📦'
+format = '[$symbol $state](bold blue) '
+
+[python]
+format = '[$symbol$virtualenv ]($style)'
 
 [git_branch]
 format = '[$symbol$branch(:$remote_branch)]($style) '

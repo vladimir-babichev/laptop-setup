@@ -101,10 +101,11 @@ brew "tflint"
 #   Programming Languages
 ###
 
-brew "python"
+brew "go"
 brew "node"
 brew "openjdk"
-brew "go"
+brew "python"
+brew "uv"
 
 
 ###

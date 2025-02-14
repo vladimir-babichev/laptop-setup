@@ -68,7 +68,7 @@ function main() {
     msg "blue" "Running setup script..."
 
     cd "$REPO_PATH/setup"
-    ./setup.sh --all
+    ./laptop-setup
 }
 
 main "$@"
