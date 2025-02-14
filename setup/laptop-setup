@@ -115,7 +115,7 @@ function configure_zsh() {
     find "$ROOT_DIR/dotfiles" -type d -depth 1 -exec sh -c 'mkdir -p "$HOME/${1#*dotfiles/}"' _ {} \;
 
     # shellcheck disable=SC2156
-    find "$ROOT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "{}" "$HOME/${1#*dotfiles/}"' _ {} \;
+    find "$ROOT_DIR/dotfiles" -depth 2 -exec sh -c 'ln -sf "{}" $(dirname "$HOME/${1#*dotfiles/}")' _ {} \;
 
     msg "green" "ZSH configured. Please restart your shell"
 }
