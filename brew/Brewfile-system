@@ -33,6 +33,7 @@ brew "wget"
 #   Modern Tooling
 ###
 
+tap "go-task/tap"
 brew "eza"
 brew "fzf"
 brew "gh"
@@ -57,6 +58,7 @@ brew "zoxide"
 #   Azure
 ###
 
+tap "azure/kubelogin"
 brew "azure-cli"
 brew "azure/kubelogin/kubelogin"
 brew "krew"
@@ -66,6 +68,9 @@ brew "krew"
 #   Kubernetes
 ###
 
+tap "dldash/core"
+tap "fluxcd/tap"
+tap "norwoodj/tap"
 brew "chart-testing"
 brew "checkov"
 brew "dldash/core/docker-color-output"
