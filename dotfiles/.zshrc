@@ -1,3 +1,30 @@
+###
+#   Brew
+###
+
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+if [ -f /opt/homebrew/bin/brew ]; then
+    export HOMEBREW_PREFIX="/opt/homebrew"
+elif [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+fi
+
+eval "$($HOMEBREW_PREFIX/bin/brew shellenv zsh)"
+
+export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH"
+export PATH="$(brew --prefix gnu-sed)/libexec/gnubin:$PATH"
+export PATH="$(brew --prefix gnu-tar)/libexec/gnubin:$PATH"
+export PATH="$(brew --prefix grep)/libexec/gnubin:$PATH"
+export PATH="$HOME/bin:$PATH"
+
+
+###
+#  Zsh
+###
+
 setopt autocd              # change directory just by typing its name
 setopt interactivecomments # allow comments in interactive mode
 setopt magicequalsubst     # enable filename expansion for arguments of the form 'anything=expression'
@@ -18,20 +45,6 @@ unsetopt beep              # be quiet!
 
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 autoload -Uz +X compinit && compinit
-
-###
-#   Brew
-###
-
-export HOMEBREW_NO_ANALYTICS=1
-export HOMEBREW_NO_AUTO_UPDATE=1
-export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH"
-export PATH="$(brew --prefix gnu-sed)/libexec/gnubin:$PATH"
-export PATH="$(brew --prefix gnu-tar)/libexec/gnubin:$PATH"
-export PATH="$(brew --prefix grep)/libexec/gnubin:$PATH"
-export PATH="$HOME/bin:$PATH"
-eval "$(brew shellenv zsh)"
 
 
 ###
