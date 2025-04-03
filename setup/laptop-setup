@@ -67,12 +67,51 @@ function setup() {
     mkdir -p "$HOME/bin"
 
     ln -sf "$SCRIPT_DIR/laptop-setup" "$HOME/bin/"
+
+    ensure_git_config
+}
+
+function ensure_git_config() {
+    msg "blue" "Ensuring Git local configuration..."
+
+    local email name
+
+    # Check and set user.email if not configured locally
+    if ! git -C "$ROOT_DIR" config --local user.email &>/dev/null; then
+        email=$(git -C "$ROOT_DIR" config --global user.email || true)
+        if [[ -n "$email" ]]; then
+            git -C "$ROOT_DIR" config --local user.email "$email"
+            msg "cyan" "  Set local user.email to: $email"
+        else
+            msg "red" "  Global user.email is not configured"
+        fi
+    fi
+
+    # Check and set user.name if not configured locally
+    if ! git -C "$ROOT_DIR" config --local user.name &>/dev/null; then
+        name=$(git -C "$ROOT_DIR" config --global user.name || true)
+        if [[ -n "$name" ]]; then
+            git -C "$ROOT_DIR" config --local user.name "$name"
+            msg "cyan" "  Set local user.name to: $name"
+        else
+            msg "red" "  Global user.name is not configured"
+        fi
+    fi
+
+    msg "green" "Git config check completed"
 }
 
 function pull_changes() {
     msg "blue" "Pulling changes..."
 
+    msg "cyan" "  Stashing local changes..."
+    git -C "$ROOT_DIR" stash
+
+    msg "cyan" "  Pulling updates..."
     git -C "$ROOT_DIR" pull
+
+    msg "cyan" "  Restoring local changes..."
+    git -C "$ROOT_DIR" stash pop
 
     msg "green" "Changes pulled"
 }
