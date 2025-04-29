@@ -7,22 +7,34 @@ REPO_URL="https://github.com/vladimir-babichev/laptop-setup.git"
 REPO_PATH="$HOME/laptop-setup"
 
 # Color definitions
-declare -A COLORS=(
-    [background]="#282c34"
-    [foreground]="#dcdfe4"
-    [red]="#e06c75"
-    [green]="#98c379"
-    [yellow]="#e5c07b"
-    [blue]="#61afef"
-    [purple]="#c678dd"
-    [cyan]="#56b6c2"
-)
+COLOR_BACKGROUND="#282c34"
+COLOR_FOREGROUND="#dcdfe4"
+COLOR_RED="#e06c75"
+COLOR_GREEN="#98c379"
+COLOR_YELLOW="#e5c07b"
+COLOR_BLUE="#61afef"
+COLOR_PURPLE="#c678dd"
+COLOR_CYAN="#56b6c2"
 
 function msg() {
     local type=$1
     local text=$2
+    local color
 
-    printf "%b[%s] %s%b\n" "\033[${COLORS[$type]}m" "$(date '+%H:%M:%S')" "$text" "\033[0m"
+    # Simple case statement to replace associative array lookup
+    case "$type" in
+        "background") color="$COLOR_BACKGROUND" ;;
+        "foreground") color="$COLOR_FOREGROUND" ;;
+        "red") color="$COLOR_RED" ;;
+        "green") color="$COLOR_GREEN" ;;
+        "yellow") color="$COLOR_YELLOW" ;;
+        "blue") color="$COLOR_BLUE" ;;
+        "purple") color="$COLOR_PURPLE" ;;
+        "cyan") color="$COLOR_CYAN" ;;
+        *) color="$COLOR_FOREGROUND" ;;
+    esac
+
+    printf "%b[%s] %s%b\n" "\033[${color}m" "$(date '+%H:%M:%S')" "$text" "\033[0m"
 }
 
 function install_xcode() {
