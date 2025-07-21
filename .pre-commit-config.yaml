@@ -16,7 +16,7 @@ repos:
           - --assume-in-merge
 
   - repo: https://github.com/sirosen/texthooks
-    rev: 0.6.8
+    rev: 0.7.0
     hooks:
       - id: fix-smartquotes
 
