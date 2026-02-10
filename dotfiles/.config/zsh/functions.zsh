@@ -159,6 +159,12 @@ function pls() {
 }
 
 
+# Flatten YAML tree to dot-separated properties
+function flatyaml() {
+    local file="${1:--}"
+    yq '.. | select(tag != "!!map" and tag != "!!seq") | (path | join(".")) + "=" + .' "$file"
+}
+
 # Searches command history for pattern.
 function hgrep() {
     fc -Dlim "*$@*" 1
